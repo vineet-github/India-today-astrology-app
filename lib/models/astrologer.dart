@@ -7,7 +7,10 @@ class Astrologer {
   String ?apiName;
   List<Data> ?data;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 8e0b630e17c0d7f2162c4b6ce7b3ece05105133a
   Astrologer(
       {this.httpStatus,
         this.httpStatusCode,
@@ -65,8 +68,11 @@ class Data {
   int? additionalMinute;
   Images ?images;
   Availability ?availability;
+<<<<<<< HEAD
   String ?skillsstr="";
   String ?languagesstr="";
+=======
+>>>>>>> 8e0b630e17c0d7f2162c4b6ce7b3ece05105133a
 
   Data(
       {this.id,
@@ -88,7 +94,11 @@ class Data {
         this.freeMinutes,
         this.additionalMinute,
         this.images,
+<<<<<<< HEAD
         this.availability,this.skillsstr,this.languagesstr});
+=======
+        this.availability});
+>>>>>>> 8e0b630e17c0d7f2162c4b6ce7b3ece05105133a
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];

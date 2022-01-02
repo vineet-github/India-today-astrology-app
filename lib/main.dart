@@ -89,7 +89,10 @@ class _MyHomePageState extends State<MyHomePage> {
   late List<Map<String, Widget>> _pages;
   int selectedIndex = 0;
   AstrologersBloc ?astrologersBloc;
+<<<<<<< HEAD
   List<Location> locations=[];
+=======
+>>>>>>> 8e0b630e17c0d7f2162c4b6ce7b3ece05105133a
 
 
   @override
@@ -109,7 +112,18 @@ class _MyHomePageState extends State<MyHomePage> {
 
     if(selectedIndex==1){
       Utility.CallNavigator(context, TalkToAstrologer(), context);
+<<<<<<< HEAD
 
+=======
+    /*  Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => TalkToAstrologer(),
+          // Pass the arguments as part of the RouteSettings. The
+          // DetailScreen reads the arguments from these settings.
+        ),
+      );*/
+>>>>>>> 8e0b630e17c0d7f2162c4b6ce7b3ece05105133a
     }
 
   }
@@ -146,6 +160,7 @@ class _MyHomePageState extends State<MyHomePage> {
     var order = await getDate();
     setState(() {
 
+<<<<<<< HEAD
       selecteddate = DateFormat('dd MMMM,yyyy').format(order);
       day=order!.day.toString();
       month=order.month.toString();
@@ -153,6 +168,9 @@ class _MyHomePageState extends State<MyHomePage> {
       print("Day "+day+"Month "+month+"Year "+year);
 
       //yyyy-MM-dd
+=======
+      selecteddate = DateFormat('dd MMMM,yyyy').format(order);  //yyyy-MM-dd
+>>>>>>> 8e0b630e17c0d7f2162c4b6ce7b3ece05105133a
 
 
 
@@ -162,7 +180,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+<<<<<<< HEAD
 
+=======
+>>>>>>> 8e0b630e17c0d7f2162c4b6ce7b3ece05105133a
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
     //
@@ -241,15 +262,23 @@ class _MyHomePageState extends State<MyHomePage> {
 
                 builder: (BuildContext context, LocationState state) {
                   print("StateIs"+state.toString());
+<<<<<<< HEAD
                 //  locations.clear();
+=======
+>>>>>>> 8e0b630e17c0d7f2162c4b6ce7b3ece05105133a
                   if (state is LocationsListError) {
                     final error = state.error;
                     String message = '${error.message}\nTap to Retry.';
                     print(message);
                   }
                   else if (state is LocationsLoaded) {
+<<<<<<< HEAD
                      locations = state.locations;
 
+=======
+                    List<Location> locations = state.locations;
+                 //   List<Model> models=state.models;
+>>>>>>> 8e0b630e17c0d7f2162c4b6ce7b3ece05105133a
                     print("StateIs"+state.toString());
                     return  Column(crossAxisAlignment:CrossAxisAlignment.center,mainAxisAlignment:MainAxisAlignment.center,children:[       Padding(
                       padding: const EdgeInsets.fromLTRB(8.0,8.0,0,0),
@@ -265,12 +294,17 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
+<<<<<<< HEAD
                         child: Container(decoration:BoxDecoration(color: Colors.orangeAccent),height: 150,width: 500,child: Column(crossAxisAlignment:CrossAxisAlignment.center,mainAxisAlignment:MainAxisAlignment.center,children:[
+=======
+                        child: Container(decoration:BoxDecoration(color: Colors.yellow),height: 150,width: 500,child: Column(crossAxisAlignment:CrossAxisAlignment.center,mainAxisAlignment:MainAxisAlignment.center,children:[
+>>>>>>> 8e0b630e17c0d7f2162c4b6ce7b3ece05105133a
                           Row(crossAxisAlignment:CrossAxisAlignment.center,mainAxisAlignment:MainAxisAlignment.center,children: [ Padding(
                             padding: const EdgeInsets.fromLTRB(20.0,10,10,10),
                             child: Text("Date :",style: TextStyle(fontSize: 16),),
                           ) ,  Padding(
                             padding: const EdgeInsets.fromLTRB(10.0,10,10,10),
+<<<<<<< HEAD
                             child: Container(decoration:BoxDecoration(color: Colors.white),height: 40,width: 250,child:GestureDetector(
                                 onTap: () {
                                   _pickDate();
@@ -280,6 +314,14 @@ class _MyHomePageState extends State<MyHomePage> {
                                   child: Text(selecteddate,style: TextStyle(fontSize: 20),
                                   ),
                                 ))),
+=======
+                            child: GestureDetector(
+                                onTap: () {
+                                  _pickDate();
+                                },
+                                child: Text(selecteddate,style: TextStyle(fontSize: 20),
+                                )),
+>>>>>>> 8e0b630e17c0d7f2162c4b6ce7b3ece05105133a
                           )],),
                           Row(crossAxisAlignment:CrossAxisAlignment.center,mainAxisAlignment:MainAxisAlignment.center,children:[
                             Padding(
@@ -288,8 +330,13 @@ class _MyHomePageState extends State<MyHomePage> {
                             ) ,Expanded(child:Container(width:600,
                               child: Padding(
                                 padding: const EdgeInsets.fromLTRB(
+<<<<<<< HEAD
                                     0, 10, 20, 0),
                                 child:Container(decoration:BoxDecoration(color: Colors.white),height: 50,width: 160,child:IgnorePointer(ignoring: false,
+=======
+                                    0, 10, 0, 0),
+                                child:IgnorePointer(ignoring: false,
+>>>>>>> 8e0b630e17c0d7f2162c4b6ce7b3ece05105133a
                                     child: SearchableDropdown(
                                       underline: SizedBox(),
                                       value: currentLocation,
@@ -299,7 +346,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                         print(currentLocation.locationid);
 
                                         context.bloc<LocationsBloc>().add(LocationEvent(location: currentLocation, locationEvents: LocationEvents.fetchLocations));
+<<<<<<< HEAD
                                         context.bloc<PanchangBloc>().add(PanchangEvent(location: currentLocation, panchangEvents: PanchangEvents.fetchPanchang,day: day,month: month,year: year));
+=======
+                                        context.bloc<PanchangBloc>().add(PanchangEvent(location: currentLocation, panchangEvents: PanchangEvents.fetchPanchang,day: "2",month: "7",year: "2021"));
+>>>>>>> 8e0b630e17c0d7f2162c4b6ce7b3ece05105133a
 
 
 
@@ -327,7 +378,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                             color: colorCustom),
                                       ),
                                     )),
+<<<<<<< HEAD
                               ))))]),
+=======
+                              )))]),
+>>>>>>> 8e0b630e17c0d7f2162c4b6ce7b3ece05105133a
 
 
 

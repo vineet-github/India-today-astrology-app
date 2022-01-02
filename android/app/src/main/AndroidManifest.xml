@@ -1,10 +1,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.app.astrology.astrology_app">
+<<<<<<< HEAD
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
    <application
         android:label="astrology_app"
         android:icon="@mipmap/ic_launcher">
 
+=======
+   <application
+        android:label="astrology_app"
+        android:icon="@mipmap/ic_launcher">
+>>>>>>> 8e0b630e17c0d7f2162c4b6ce7b3ece05105133a
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
