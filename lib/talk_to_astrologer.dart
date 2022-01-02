@@ -1,6 +1,7 @@
 import 'package:astrology_app/blocs/astrologers_bloc.dart';
 import 'package:astrology_app/events.dart';
 import 'package:astrology_app/models/astrologer.dart';
+import 'package:astrology_app/models/astrologer.dart';
 import 'package:astrology_app/repository.dart';
 import 'package:astrology_app/states.dart';
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
@@ -10,6 +11,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 
 import 'constants.dart';
+import 'models/astrologer.dart';
+
+
 
 class TalkToAstrologer extends StatefulWidget{
 
@@ -24,7 +28,7 @@ class TalkToAstrologerScreen extends State{
   List<Data> filteredastrologerslist=[];
   GlobalKey<AutoCompleteTextFieldState<Data>> key = new GlobalKey();
   AstrologersBloc ?astrologersBloc;
-<<<<<<< HEAD
+
   String skillsstr="";
   String filteredskillsstr="";
   String filteredlanguagestr="";
@@ -78,8 +82,7 @@ class TalkToAstrologerScreen extends State{
 
   }
 
-=======
->>>>>>> 8e0b630e17c0d7f2162c4b6ce7b3ece05105133a
+
 
 
 
@@ -183,7 +186,7 @@ class TalkToAstrologerScreen extends State{
                 padding: const EdgeInsets.only(left:8.0),
                 child: Image.asset("assets/filter.png",height: 20,),
               ),
-<<<<<<< HEAD
+
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(8.0,0,8,0),
@@ -203,25 +206,16 @@ class TalkToAstrologerScreen extends State{
                   ).toList();
                 },
               ),
-=======
-            ),Padding(
-              padding: const EdgeInsets.fromLTRB(8.0,0,8.0,0),
-              child:GestureDetector(onTap: (){
 
-                setState(() {
-                  astrologerslist.sort((a, b) => a.experience!.compareTo(b.experience!));
-                });
-              },child:  Image.asset("assets/sort.png",height: 20,)),
->>>>>>> 8e0b630e17c0d7f2162c4b6ce7b3ece05105133a
-            )
+            ),
           ],),
 
         ),
-<<<<<<< HEAD
+
         Row(children:[Expanded(
-=======
-        Expanded(flex: 0,
->>>>>>> 8e0b630e17c0d7f2162c4b6ce7b3ece05105133a
+
+
+
           child: Padding(
             padding:
             const EdgeInsets.fromLTRB(20, 10, 20, 0),
@@ -235,22 +229,14 @@ class TalkToAstrologerScreen extends State{
 
                           });
 
-<<<<<<< HEAD
-
-=======
-                          /*     futurebool=false;
-                                        stockpickinglist.clear();
-                                        setState(() {
 
 
-                                        });*/
->>>>>>> 8e0b630e17c0d7f2162c4b6ce7b3ece05105133a
+
 
                         }else{
                           futurebool=true;
                           str=str.toLowerCase();
                           setState(() {
-<<<<<<< HEAD
                               if(_selectedChoices=="Name"){
                                 filteredastrologerslist=astrologerslist.where((element){
                                   var name=  element.firstName!.toLowerCase();
@@ -283,17 +269,7 @@ class TalkToAstrologerScreen extends State{
 
 
 
-=======
 
-                              filteredastrologerslist=astrologerslist.where((element){
-                                var name=  element.firstName!.toLowerCase();
-                                print(name.toString());
-                                return name.contains(str);
-                              }).toList();
-
-
-                         //   print('filtered_list_inside'+filteredstockpickinglist.length.toString());
->>>>>>> 8e0b630e17c0d7f2162c4b6ce7b3ece05105133a
                           });
 
 
@@ -314,7 +290,7 @@ class TalkToAstrologerScreen extends State{
                       ),hintText: 'Search'),
 
                       itemSubmitted: (item) {
-<<<<<<< HEAD
+
                           if(_selectedChoices=="Name"){
                             setState(() => searchTextField!.textField.controller!.text =
                             item.firstName!);
@@ -329,11 +305,9 @@ class TalkToAstrologerScreen extends State{
                                 item.firstName!);
                           }
 
-=======
 
-                          setState(() => searchTextField!.textField.controller!.text =
-                              item.firstName!);
->>>>>>> 8e0b630e17c0d7f2162c4b6ce7b3ece05105133a
+
+
 
 
 
@@ -353,7 +327,7 @@ class TalkToAstrologerScreen extends State{
 
                       },
                       itemSorter: (a, b) {
-<<<<<<< HEAD
+
                           if(_selectedChoices=="Name"){
                             return a.firstName!.compareTo(b.firstName!);
                           }else if(_selectedChoices=="Skills"){
@@ -364,16 +338,16 @@ class TalkToAstrologerScreen extends State{
                             return a.firstName!.compareTo(b.firstName!);
                           }
 
-=======
 
-                          return a.firstName!.compareTo(b.firstName!);
->>>>>>> 8e0b630e17c0d7f2162c4b6ce7b3ece05105133a
+
+
+
 
 
                       },
 
                       itemFilter: (item, query) {
-<<<<<<< HEAD
+
                           if(_selectedChoices=="Name"){
                             return item.firstName!
                                 .toLowerCase()
@@ -411,16 +385,7 @@ class TalkToAstrologerScreen extends State{
             ).toList();
           },
         )]),
-=======
 
-                          return item.firstName!
-                              .toLowerCase()
-                              .startsWith(query.toLowerCase());
-
-                      }),))),
-          ),
-        ),
->>>>>>> 8e0b630e17c0d7f2162c4b6ce7b3ece05105133a
 
         BlocBuilder<AstrologersBloc,AstrologersState>(cubit:astrologersBloc,builder:  (buildContext, AstrologersState state){
       if (state is AstrologersError) {
@@ -433,7 +398,7 @@ class TalkToAstrologerScreen extends State{
    return   Expanded(child:
       ListView.separated(
       itemBuilder: (BuildContext ctxt, int index) {
-<<<<<<< HEAD
+
         if(futurebool){
           List<Skills>? skills=filteredastrologerslist.elementAt(index).skills;
        //   filteredskillsstr="";
@@ -468,8 +433,6 @@ class TalkToAstrologerScreen extends State{
           print("Languages arr"+astrologerslist.elementAt(index).languagesstr.toString());
         }
 
-=======
->>>>>>> 8e0b630e17c0d7f2162c4b6ce7b3ece05105133a
 
       return Padding(
       padding: const EdgeInsets.fromLTRB(8.0,8.0,8.0,0),
@@ -477,21 +440,20 @@ class TalkToAstrologerScreen extends State{
       //                           <-- Card
 
       child:GestureDetector( onTap :(){
-<<<<<<< HEAD
-=======
+
   //    Utility.CallNavigator(ctxt, IncomingStockForm(),futurebool?filteredstockpickinglist.elementAt(index):incomingstockitems.elementAt(index));
->>>>>>> 8e0b630e17c0d7f2162c4b6ce7b3ece05105133a
+
 
 
 
 
 
       },
-<<<<<<< HEAD
+
       child:Row( children:[Expanded(flex:1,child: futurebool?Image.network(filteredastrologerslist.elementAt(index).images!.medium!.imageUrl.toString(),width: 70,height: 70,):Image.network(astrologerslist.elementAt(index).images!.medium!.imageUrl.toString(),width: 70,height: 70,)),Expanded(flex: 2,child:Column(
-=======
-      child:Row( children:[Expanded(flex:1,child: Image.network(astrologerslist.elementAt(index).images!.medium!.imageUrl.toString(),width: 70,height: 70,)),Expanded(flex: 2,child:Column(
->>>>>>> 8e0b630e17c0d7f2162c4b6ce7b3ece05105133a
+
+
+
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
 
@@ -514,11 +476,7 @@ class TalkToAstrologerScreen extends State{
       padding:
       const EdgeInsets.fromLTRB(20, 10, 20, 10),
       child: new RichText(
-<<<<<<< HEAD
 
-=======
-      //data.taskname.toString()
->>>>>>> 8e0b630e17c0d7f2162c4b6ce7b3ece05105133a
       overflow: TextOverflow.ellipsis,
       maxLines: 3,
       strutStyle: StrutStyle(fontSize: 15.0),
@@ -541,11 +499,10 @@ class TalkToAstrologerScreen extends State{
       child: new Container(
       child: Padding(
       padding:
-<<<<<<< HEAD
+
       const EdgeInsets.fromLTRB(20, 5, 10, 5),
-=======
-      const EdgeInsets.fromLTRB(20, 10, 20, 10),
->>>>>>> 8e0b630e17c0d7f2162c4b6ce7b3ece05105133a
+
+
       child: new RichText(
       //data.taskname.toString()
       overflow: TextOverflow.ellipsis,
@@ -553,13 +510,10 @@ class TalkToAstrologerScreen extends State{
       strutStyle: StrutStyle(fontSize: 15.0),
       text: TextSpan(
       style: TextStyle(color: Colors.black),
-<<<<<<< HEAD
+
       text: futurebool?filteredastrologerslist.elementAt(index).skillsstr:astrologerslist.elementAt(index).skillsstr),
-=======
-      text: futurebool?filteredastrologerslist.elementAt(index).aboutMe:astrologerslist
-          .elementAt(index)
-          .aboutMe),
->>>>>>> 8e0b630e17c0d7f2162c4b6ce7b3ece05105133a
+
+
       ),
       )))
       ],
@@ -574,7 +528,7 @@ class TalkToAstrologerScreen extends State{
                 child: new Container(
                     child: Padding(
                       padding:
-<<<<<<< HEAD
+
                       const EdgeInsets.fromLTRB(20, 5, 20, 5),
                       child: new RichText(
 
@@ -601,23 +555,15 @@ class TalkToAstrologerScreen extends State{
                       const EdgeInsets.fromLTRB(20, 5, 20, 5),
                       child: new RichText(
 
-=======
-                      const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                      child: new RichText(
-                        //data.taskname.toString()
->>>>>>> 8e0b630e17c0d7f2162c4b6ce7b3ece05105133a
+
                         overflow: TextOverflow.ellipsis,
                         maxLines: 3,
                         strutStyle: StrutStyle(fontSize: 15.0),
                         text: TextSpan(
                             style: TextStyle(color: Colors.black),
-<<<<<<< HEAD
+
                             text: futurebool?filteredastrologerslist.elementAt(index).experience.toString()+" years":astrologerslist.elementAt(index).experience.toString()+" years"),
-=======
-                            text: futurebool?filteredastrologerslist.elementAt(index).experience.toString()+" years":astrologerslist
-                                .elementAt(index)
-                                .experience.toString()+" years"),
->>>>>>> 8e0b630e17c0d7f2162c4b6ce7b3ece05105133a
+
                       ),
                     )))
           ],
@@ -628,11 +574,9 @@ class TalkToAstrologerScreen extends State{
       child: new Container(
       child: Padding(
       padding:
-<<<<<<< HEAD
+
       const EdgeInsets.fromLTRB(20, 5, 20, 5),
-=======
-      const EdgeInsets.fromLTRB(20, 10, 20, 10),
->>>>>>> 8e0b630e17c0d7f2162c4b6ce7b3ece05105133a
+
       child: new RichText(
       //data.taskname.toString()
       overflow: TextOverflow.ellipsis,
@@ -647,7 +591,7 @@ class TalkToAstrologerScreen extends State{
       )))
       ],
       ),
-<<<<<<< HEAD
+
         Padding(
           padding: const EdgeInsets.fromLTRB(20.0,5,20,5),
           child: ElevatedButton.icon(
@@ -660,19 +604,9 @@ class TalkToAstrologerScreen extends State{
               print('Pressed');
             },
           ),
-=======
-        ElevatedButton.icon(
-          label: Text('Talk On Call',style: TextStyle(color: Colors.white),),
-          icon: Icon(Icons.phone,color: Colors.white,),
-            style: ElevatedButton.styleFrom(
-              primary: Colors.deepOrange,
-            ),
-          onPressed: () {
-            print('Pressed');
-          },
->>>>>>> 8e0b630e17c0d7f2162c4b6ce7b3ece05105133a
-        )
-      ]))])),
+
+
+        ) ]))])),
       /*title: Text(measureList.elementAt(index).startdate,
                                      ),*/
       ),
@@ -690,11 +624,10 @@ class TalkToAstrologerScreen extends State{
 
 
 
-<<<<<<< HEAD
+
 return CircularProgressIndicator(color: Colors.orange,);
-=======
-return CircularProgressIndicator();
->>>>>>> 8e0b630e17c0d7f2162c4b6ce7b3ece05105133a
+
+
         }
         )],),
     );});
