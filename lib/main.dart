@@ -90,9 +90,6 @@ class _MyHomePageState extends State<MyHomePage> {
   int selectedIndex = 0;
   AstrologersBloc ?astrologersBloc;
 
-  List<Location> locations=[];
-
-
 
   @override
   void initState() {
@@ -114,7 +111,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
     if(selectedIndex==1){
       Utility.CallNavigator(context, TalkToAstrologer(), context);
-
+    /*  Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => TalkToAstrologer(),
+          // Pass the arguments as part of the RouteSettings. The
+          // DetailScreen reads the arguments from these settings.
+        ),
+      );*/
     }
 
   }
@@ -149,17 +153,12 @@ class _MyHomePageState extends State<MyHomePage> {
   _pickDate() async {
 
     var order = await getDate();
+
     setState(() {
-
-
-      selecteddate = DateFormat('dd MMMM,yyyy').format(order);
       day=order!.day.toString();
       month=order.month.toString();
       year=order.year.toString();
-      print("Day "+day+"Month "+month+"Year "+year);
-
-      //yyyy-MM-dd
-
+      selecteddate = DateFormat('dd MMMM,yyyy').format(order);  //yyyy-MM-dd
 
 
 
@@ -169,7 +168,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
     //
@@ -248,17 +246,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
                 builder: (BuildContext context, LocationState state) {
                   print("StateIs"+state.toString());
-
                   if (state is LocationsListError) {
                     final error = state.error;
                     String message = '${error.message}\nTap to Retry.';
                     print(message);
                   }
                   else if (state is LocationsLoaded) {
-
-                     locations = state.locations;
-
-
+                    List<Location> locations = state.locations;
+                 //   List<Model> models=state.models;
                     print("StateIs"+state.toString());
                     return  Column(crossAxisAlignment:CrossAxisAlignment.center,mainAxisAlignment:MainAxisAlignment.center,children:[       Padding(
                       padding: const EdgeInsets.fromLTRB(8.0,8.0,0,0),
@@ -274,26 +269,18 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-
-                        child: Container(decoration:BoxDecoration(color: Colors.orangeAccent),height: 160,width: 500,child: Column(crossAxisAlignment:CrossAxisAlignment.center,mainAxisAlignment:MainAxisAlignment.center,children:[
-
+                        child: Container(decoration:BoxDecoration(color: Colors.orangeAccent),height: 150,width: 500,child: Column(crossAxisAlignment:CrossAxisAlignment.center,mainAxisAlignment:MainAxisAlignment.center,children:[
                           Row(crossAxisAlignment:CrossAxisAlignment.center,mainAxisAlignment:MainAxisAlignment.center,children: [ Padding(
                             padding: const EdgeInsets.fromLTRB(20.0,10,10,10),
                             child: Text("Date :",style: TextStyle(fontSize: 16),),
                           ) ,  Padding(
                             padding: const EdgeInsets.fromLTRB(10.0,10,10,10),
-
-                            child: Container(decoration:BoxDecoration(color: Colors.white),height: 40,width: 250,child:GestureDetector(
+                            child: GestureDetector(
                                 onTap: () {
                                   _pickDate();
                                 },
-                                child: Padding(
-                                  padding: const EdgeInsets.fromLTRB(10.0,5,10,10),
-                                  child: Text(selecteddate,style: TextStyle(fontSize: 20),
-                                  ),
-                                ))),
-
-
+                                child: Text(selecteddate,style: TextStyle(fontSize: 20),
+                                )),
                           )],),
                           Row(crossAxisAlignment:CrossAxisAlignment.center,mainAxisAlignment:MainAxisAlignment.center,children:[
                             Padding(
@@ -302,11 +289,8 @@ class _MyHomePageState extends State<MyHomePage> {
                             ) ,Expanded(child:Container(width:600,
                               child: Padding(
                                 padding: const EdgeInsets.fromLTRB(
-
-                                    0, 10, 20, 0),
-                                child:Container(decoration:BoxDecoration(color: Colors.white),height: 50,width: 160,child:IgnorePointer(ignoring: false,
-
-
+                                    0, 10, 0, 0),
+                                child:IgnorePointer(ignoring: false,
                                     child: SearchableDropdown(
                                       underline: SizedBox(),
                                       value: currentLocation,
@@ -316,11 +300,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                         print(currentLocation.locationid);
 
                                         context.bloc<LocationsBloc>().add(LocationEvent(location: currentLocation, locationEvents: LocationEvents.fetchLocations));
-
                                         context.bloc<PanchangBloc>().add(PanchangEvent(location: currentLocation, panchangEvents: PanchangEvents.fetchPanchang,day: day,month: month,year: year));
-
-
-
 
 
 
@@ -347,531 +327,527 @@ class _MyHomePageState extends State<MyHomePage> {
                                             color: colorCustom),
                                       ),
                                     )),
-
-                              ))))]),
-
+                              )))]),
 
 
 
 
+                        ]
+
+
+                        ),),
+                      ),
+                      BlocBuilder<PanchangBloc,PanchangState>(builder:  (BuildContext context, PanchangState state){
+                        if (state is PanchangError) {
+                          final error = state.error;
+                          String message = '${error.message}\nTap to Retry.';
+                          print(message);
+                        }else if(state is PanchangLoaded){
+                          Panchang panchang=state.panchang;
+                          return  Column(children: [
+                            SingleChildScrollView(scrollDirection:Axis.horizontal,child:Row(children: [
+                              Row(children: [
+                                Icon(Icons.wb_sunny),Column(crossAxisAlignment:CrossAxisAlignment.center,mainAxisAlignment:MainAxisAlignment.center,children: [
+                                  Text("Sunrise"),Text(panchang.data!.sunrise.toString())
+                                ],)
+
+                              ],),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(width: 1, height:30,color: Colors.black),
+                              ),
+                              Row(children: [
+                                Icon(Icons.wb_sunny),Column(crossAxisAlignment:CrossAxisAlignment.center,mainAxisAlignment:MainAxisAlignment.center,children: [
+                                  Text("Sunset"),Text(panchang.data!.sunset.toString())
+                                ],)
+
+                              ],),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(width: 1, height:30,color: Colors.black),
+                              ),
+                              Row(children: [
+                                Icon(Icons.nightlight_round),Column(crossAxisAlignment:CrossAxisAlignment.center,mainAxisAlignment:MainAxisAlignment.center,children: [
+                                  Text("Moonrise"),Text(panchang.data!.moonrise.toString())
+                                ],)
+
+                              ],),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(width: 1, height:30,color: Colors.black),
+                              ),
+                              Row(children: [
+                                Icon(Icons.nights_stay_outlined),Column(crossAxisAlignment:CrossAxisAlignment.center,mainAxisAlignment:MainAxisAlignment.center,children: [
+                                  Text("Moonset"),Text(panchang.data!.moonset.toString())
+                                ],)
+
+                              ],),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(width: 1, height:30,color: Colors.black),
+                              ),
+
+                              Row(children: [
+                                Icon(Icons.wb_sunny_outlined),Column(crossAxisAlignment:CrossAxisAlignment.center,mainAxisAlignment:MainAxisAlignment.center,children: [
+                                  Text("Vedic Sunrise"),Text(panchang.data!.vedicSunrise.toString())
+                                ],)
+
+                              ],),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(width: 1, height:30,color: Colors.black),
+                              ),
+                              Row(children: [
+                                Icon(Icons.wb_sunny_outlined),Column(crossAxisAlignment:CrossAxisAlignment.center,mainAxisAlignment:MainAxisAlignment.center,children: [
+                                  Text("Vedic Sunset"),Text(panchang.data!.vedicSunset.toString())
+                                ],)
+
+                              ],),
 
 
 
 
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(20.0,30,0,10),
-                        child: BlocBuilder<PanchangBloc,PanchangState>(builder:  (BuildContext context, PanchangState state){
-                          if (state is PanchangError) {
-                            final error = state.error;
-                            String message = '${error.message}\nTap to Retry.';
-                            print(message);
-                          }else if(state is PanchangLoaded){
-                            Panchang panchang=state.panchang;
-                            return  Column(children: [
-                              SingleChildScrollView(scrollDirection:Axis.horizontal,child:Row(children: [
-                                Row(children: [
-                                  Icon(Icons.wb_sunny),Column(crossAxisAlignment:CrossAxisAlignment.center,mainAxisAlignment:MainAxisAlignment.center,children: [
-                                    Text("Sunrise"),Text(panchang.data!.sunrise.toString())
-                                  ],)
+
+
+                            ],)),
+
+                            Column(children: [
+                              Text("Tithi",style: TextStyle(fontSize: 18,color: Colors.black),),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(10.0,10,0,5),
+                                child: Row(children: [
+                                  Text("Tithi Number :"),Text(panchang.data!.tithi!.details!.tithiNumber.toString())
+
 
                                 ],),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(width: 1, height:30,color: Colors.black),
-                                ),
-                                Row(children: [
-                                  Icon(Icons.wb_sunny),Column(crossAxisAlignment:CrossAxisAlignment.center,mainAxisAlignment:MainAxisAlignment.center,children: [
-                                    Text("Sunset"),Text(panchang.data!.sunset.toString())
-                                  ],)
+                              ),
+                              Padding(
+                                padding:const EdgeInsets.fromLTRB(10.0,10,0,5),
+                                child: Row(children: [
+                                  Text("Tithi Name :"),Text(panchang.data!.tithi!.details!.tithiName.toString())
+
 
                                 ],),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(width: 1, height:30,color: Colors.black),
-                                ),
-                                Row(children: [
-                                  Icon(Icons.nightlight_round),Column(crossAxisAlignment:CrossAxisAlignment.center,mainAxisAlignment:MainAxisAlignment.center,children: [
-                                    Text("Moonrise"),Text(panchang.data!.moonrise.toString())
-                                  ],)
+                              ),
+                              Padding(
+                                padding: const  EdgeInsets.fromLTRB(10.0,10,0,5),
+                                child: Row(children: [
+                                  Text("Special"),Text(panchang.data!.tithi!.details!.special.toString())
+
 
                                 ],),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(width: 1, height:30,color: Colors.black),
-                                ),
-                                Row(children: [
-                                  Icon(Icons.nights_stay_outlined),Column(crossAxisAlignment:CrossAxisAlignment.center,mainAxisAlignment:MainAxisAlignment.center,children: [
-                                    Text("Moonset"),Text(panchang.data!.moonset.toString())
-                                  ],)
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(10.0,10,0,5),
+                                child: Row(children: [
+                                  Text("Summary :"),Expanded(child:Text(panchang.data!.tithi!.details!.summary.toString()))
+
 
                                 ],),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(width: 1, height:30,color: Colors.black),
-                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(10.0,10,0,5),
+                                child: Row(children: [
+                                  Text("Deity :"),Text(panchang.data!.tithi!.details!.deity.toString())
 
-                                Row(children: [
-                                  Icon(Icons.wb_sunny_outlined),Column(crossAxisAlignment:CrossAxisAlignment.center,mainAxisAlignment:MainAxisAlignment.center,children: [
-                                    Text("Vedic Sunrise"),Text(panchang.data!.vedicSunrise.toString())
-                                  ],)
 
                                 ],),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(width: 1, height:30,color: Colors.black),
-                                ),
-                                Row(children: [
-                                  Icon(Icons.wb_sunny_outlined),Column(crossAxisAlignment:CrossAxisAlignment.center,mainAxisAlignment:MainAxisAlignment.center,children: [
-                                    Text("Vedic Sunset"),Text(panchang.data!.vedicSunset.toString())
-                                  ],)
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(10.0,10,0,5),
+                                child: Row(children: [
+                                  Text("End Time :"),Text(panchang.data!.tithi!.endTime!.hour.toString()+"hr "+panchang.data!.tithi!.endTime!.minute.toString()+"min "+panchang.data!.tithi!.endTime!.minute.toString()+"sec")
+
 
                                 ],),
+                              )
 
 
 
+                            ],),
+                            Column(children: [
+                              Text("Nakshatra",style: TextStyle(fontSize: 18,color: Colors.black),),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(10.0,10,0,5),
+                                child: Row(children: [
+                                  Text("Nakshatra Number:"),Text(panchang.data!.nakshatra!.detailsSecond!.nakNumber.toString())
 
 
+                                ],),
+                              ),
+                              Padding(
+                                padding:const EdgeInsets.fromLTRB(10.0,10,0,5),
+                                child: Row(children: [
+                                  Text("Nakshatra Name :"),Text(panchang.data!.nakshatra!.detailsSecond!.nakName.toString())
 
-                              ],)),
 
-                              Column(children: [
-                                Text("Tithi",style: TextStyle(fontSize: 18,color: Colors.black),),
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(10.0,10,0,5),
-                                  child: Row(children: [
-                                    Text("Tithi Number :"),Text(panchang.data!.tithi!.details!.tithiNumber.toString())
+                                ],),
+                              ),
+                              Padding(
+                                padding: const  EdgeInsets.fromLTRB(10.0,10,0,5),
+                                child: Row(children: [
+                                  Text("Ruler"),Text(panchang.data!.nakshatra!.detailsSecond!.ruler.toString())
 
 
-                                  ],),
-                                ),
-                                Padding(
-                                  padding:const EdgeInsets.fromLTRB(10.0,10,0,5),
-                                  child: Row(children: [
-                                    Text("Tithi Name :"),Text(panchang.data!.tithi!.details!.tithiName.toString())
+                                ],),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(10.0,10,0,5),
+                                child: Row(children: [
+                                  Text("Deity :"),Text(panchang.data!.nakshatra!.detailsSecond!.deity.toString())
 
 
-                                  ],),
-                                ),
-                                Padding(
-                                  padding: const  EdgeInsets.fromLTRB(10.0,10,0,5),
-                                  child: Row(children: [
-                                    Text("Special"),Text(panchang.data!.tithi!.details!.special.toString())
+                                ],),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(10.0,10,0,5),
+                                child: Row(children: [
+                                  Text("Special :"),Text(panchang.data!.nakshatra!.detailsSecond!.special.toString())
 
 
-                                  ],),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(10.0,10,0,5),
-                                  child: Row(children: [
-                                    Text("Summary :"),Expanded(child:Text(panchang.data!.tithi!.details!.summary.toString()))
+                                ],),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(10.0,10,0,5),
+                                child: Row(children: [
+                                  Text("Summary :"),Expanded(child:Text(panchang.data!.nakshatra!.detailsSecond!.summary.toString()))
 
 
-                                  ],),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(10.0,10,0,5),
-                                  child: Row(children: [
-                                    Text("Deity :"),Text(panchang.data!.tithi!.details!.deity.toString())
+                                ],),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(10.0,10,0,5),
+                                child: Row(children: [
+                                  Text("End Time :"),Text(panchang.data!.tithi!.endTime!.hour.toString()+"hr "+panchang.data!.tithi!.endTime!.minute.toString()+"min "+panchang.data!.nakshatra!.endTime!.second.toString()+"sec")
 
 
-                                  ],),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(10.0,10,0,5),
-                                  child: Row(children: [
-                                    Text("End Time :"),Text(panchang.data!.tithi!.endTime!.hour.toString()+"hr "+panchang.data!.tithi!.endTime!.minute.toString()+"min "+panchang.data!.tithi!.endTime!.minute.toString()+"sec")
+                                ],),
+                              )
 
 
-                                  ],),
-                                )
 
+                            ],),
+                            Column(children: [
+                              Text("Yog",style: TextStyle(fontSize: 18,color: Colors.black),),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(10.0,10,0,5),
+                                child: Row(children: [
+                                  Text("Yoga Number:"),Text(panchang.data!.yog!.detailsThird!.yogNumber.toString())
 
 
-                              ],),
-                              Column(children: [
-                                Text("Nakshatra",style: TextStyle(fontSize: 18,color: Colors.black),),
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(10.0,10,0,5),
-                                  child: Row(children: [
-                                    Text("Nakshatra Number:"),Text(panchang.data!.nakshatra!.detailsSecond!.nakNumber.toString())
+                                ],),
+                              ),
 
+                              Padding(
+                                padding: const  EdgeInsets.fromLTRB(10.0,10,0,5),
+                                child: Row(children: [
+                                  Text("Yoga Name"),Text(panchang.data!.yog!.detailsThird!.yogName.toString())
 
-                                  ],),
-                                ),
-                                Padding(
-                                  padding:const EdgeInsets.fromLTRB(10.0,10,0,5),
-                                  child: Row(children: [
-                                    Text("Nakshatra Name :"),Text(panchang.data!.nakshatra!.detailsSecond!.nakName.toString())
 
+                                ],),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(10.0,10,0,5),
+                                child: Row(children: [
+                                  Text("Special :"),Text(panchang.data!.yog!.detailsThird!.special.toString())
 
-                                  ],),
-                                ),
-                                Padding(
-                                  padding: const  EdgeInsets.fromLTRB(10.0,10,0,5),
-                                  child: Row(children: [
-                                    Text("Ruler"),Text(panchang.data!.nakshatra!.detailsSecond!.ruler.toString())
 
+                                ],),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(10.0,10,0,5),
+                                child: Row(children: [
+                                  Text("Meaning :"),Expanded(child:Text(panchang.data!.yog!.detailsThird!.meaning.toString()))
 
-                                  ],),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(10.0,10,0,5),
-                                  child: Row(children: [
-                                    Text("Deity :"),Text(panchang.data!.nakshatra!.detailsSecond!.deity.toString())
 
+                                ],),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(10.0,10,0,5),
+                                child: Row(children: [
+                                  Text("End Time :"),Text(panchang.data!.yog!.endTime!.hour.toString()+"hr "+panchang.data!.yog!.endTime!.minute.toString()+"min "+panchang.data!.yog!.endTime!.second.toString()+"sec")
 
-                                  ],),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(10.0,10,0,5),
-                                  child: Row(children: [
-                                    Text("Special :"),Text(panchang.data!.nakshatra!.detailsSecond!.special.toString())
 
+                                ],),
+                              )
 
-                                  ],),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(10.0,10,0,5),
-                                  child: Row(children: [
-                                    Text("Summary :"),Expanded(child:Text(panchang.data!.nakshatra!.detailsSecond!.summary.toString()))
 
 
-                                  ],),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(10.0,10,0,5),
-                                  child: Row(children: [
-                                    Text("End Time :"),Text(panchang.data!.tithi!.endTime!.hour.toString()+"hr "+panchang.data!.tithi!.endTime!.minute.toString()+"min "+panchang.data!.nakshatra!.endTime!.second.toString()+"sec")
+                            ],),
+                            Column(children: [
+                              Text("Karan",style: TextStyle(fontSize: 18,color: Colors.black),),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(10.0,10,0,5),
+                                child: Row(children: [
+                                  Text("Karan Number :"),Text(panchang.data!.karan!.detailsFourth!.karanNumber.toString())
 
 
-                                  ],),
-                                )
+                                ],),
+                              ),
+                              Padding(
+                                padding:const EdgeInsets.fromLTRB(10.0,10,0,5),
+                                child: Row(children: [
+                                  Text("Karan Name :"),Text(panchang.data!.karan!.detailsFourth!.karanName.toString())
 
 
+                                ],),
+                              ),
+                              Padding(
+                                padding: const  EdgeInsets.fromLTRB(10.0,10,0,5),
+                                child: Row(children: [
+                                  Text("Special"),Expanded(child:Text(panchang.data!.karan!.detailsFourth!.special.toString()))
 
-                              ],),
-                              Column(children: [
-                                Text("Yog",style: TextStyle(fontSize: 18,color: Colors.black),),
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(10.0,10,0,5),
-                                  child: Row(children: [
-                                    Text("Yoga Number:"),Text(panchang.data!.yog!.detailsThird!.yogNumber.toString())
 
+                                ],),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(10.0,10,0,5),
+                                child: Row(children: [
+                                  Text("Deity :"),Text(panchang.data!.karan!.detailsFourth!.deity.toString())
 
-                                  ],),
-                                ),
 
-                                Padding(
-                                  padding: const  EdgeInsets.fromLTRB(10.0,10,0,5),
-                                  child: Row(children: [
-                                    Text("Yoga Name"),Text(panchang.data!.yog!.detailsThird!.yogName.toString())
+                                ],),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(10.0,10,0,5),
+                                child: Row(children: [
+                                  Text("End Time :"),Text(panchang.data!.karan!.endTime!.hour.toString()+"hr "+panchang.data!.karan!.endTime!.minute.toString()+"min "+panchang.data!.karan!.endTime!.second.toString()+"sec")
 
 
-                                  ],),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(10.0,10,0,5),
-                                  child: Row(children: [
-                                    Text("Special :"),Text(panchang.data!.yog!.detailsThird!.special.toString())
 
+                                ],),
+                              ),
 
-                                  ],),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(10.0,10,0,5),
-                                  child: Row(children: [
-                                    Text("Meaning :"),Expanded(child:Text(panchang.data!.yog!.detailsThird!.meaning.toString()))
 
 
-                                  ],),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(10.0,10,0,5),
-                                  child: Row(children: [
-                                    Text("End Time :"),Text(panchang.data!.yog!.endTime!.hour.toString()+"hr "+panchang.data!.yog!.endTime!.minute.toString()+"min "+panchang.data!.yog!.endTime!.second.toString()+"sec")
 
+                            ],),
+                            Column(children: [
+                              Text("Hindu Maah",style: TextStyle(fontSize: 18,color: Colors.black),),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(10.0,10,0,5),
+                                child: Row(children: [
+                                  Text("Adhik Status :"),Text(panchang.data!.hinduMaah!.adhikStatus.toString())
 
-                                  ],),
-                                )
 
+                                ],),
+                              ),
+                              Padding(
+                                padding:const EdgeInsets.fromLTRB(10.0,10,0,5),
+                                child: Row(children: [
+                                  Text("Purnimanta :"),Text(panchang.data!.hinduMaah!.purnimanta.toString())
 
 
-                              ],),
-                              Column(children: [
-                                Text("Karan",style: TextStyle(fontSize: 18,color: Colors.black),),
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(10.0,10,0,5),
-                                  child: Row(children: [
-                                    Text("Karan Number :"),Text(panchang.data!.karan!.detailsFourth!.karanNumber.toString())
+                                ],),
+                              ),
+                              Padding(
+                                padding: const  EdgeInsets.fromLTRB(10.0,10,0,5),
+                                child: Row(children: [
+                                  Text("Amanta"),Text(panchang.data!.hinduMaah!.amanta.toString())
 
 
-                                  ],),
-                                ),
-                                Padding(
-                                  padding:const EdgeInsets.fromLTRB(10.0,10,0,5),
-                                  child: Row(children: [
-                                    Text("Karan Name :"),Text(panchang.data!.karan!.detailsFourth!.karanName.toString())
+                                ],),
+                              ),
 
 
-                                  ],),
-                                ),
-                                Padding(
-                                  padding: const  EdgeInsets.fromLTRB(10.0,10,0,5),
-                                  child: Row(children: [
-                                    Text("Special"),Expanded(child:Text(panchang.data!.karan!.detailsFourth!.special.toString()))
 
 
-                                  ],),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(10.0,10,0,5),
-                                  child: Row(children: [
-                                    Text("Deity :"),Text(panchang.data!.karan!.detailsFourth!.deity.toString())
+                            ],),
+                            Column(children: [
 
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(10.0,10,0,5),
+                                child: Row(children: [
+                                  Text("Paksha:"),Text(panchang.data!.paksha.toString())
 
-                                  ],),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(10.0,10,0,5),
-                                  child: Row(children: [
-                                    Text("End Time :"),Text(panchang.data!.karan!.endTime!.hour.toString()+"hr "+panchang.data!.karan!.endTime!.minute.toString()+"min "+panchang.data!.karan!.endTime!.second.toString()+"sec")
 
+                                ],),
+                              ),
+                              Padding(
+                                padding:const EdgeInsets.fromLTRB(10.0,10,0,5),
+                                child: Row(children: [
+                                  Text("Ritu :"),Text(panchang.data!.ritu.toString())
 
 
-                                  ],),
-                                ),
+                                ],),
+                              ),
+                              Padding(
+                                padding: const  EdgeInsets.fromLTRB(10.0,10,0,5),
+                                child: Row(children: [
+                                  Text("Sunsign"),Text(panchang.data!.sunSign.toString())
 
 
+                                ],),
+                              ),
+                              Padding(
+                                padding: const  EdgeInsets.fromLTRB(10.0,10,0,5),
+                                child: Row(children: [
+                                  Text("Moonsign"),Text(panchang.data!.moonSign.toString())
 
 
-                              ],),
-                              Column(children: [
-                                Text("Hindu Maah",style: TextStyle(fontSize: 18,color: Colors.black),),
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(10.0,10,0,5),
-                                  child: Row(children: [
-                                    Text("Adhik Status :"),Text(panchang.data!.hinduMaah!.adhikStatus.toString())
+                                ],),
+                              ),
+                              Padding(
+                                padding: const  EdgeInsets.fromLTRB(10.0,10,0,5),
+                                child: Row(children: [
+                                  Text("Ayana"),Text(panchang.data!.ayana.toString())
 
 
-                                  ],),
-                                ),
-                                Padding(
-                                  padding:const EdgeInsets.fromLTRB(10.0,10,0,5),
-                                  child: Row(children: [
-                                    Text("Purnimanta :"),Text(panchang.data!.hinduMaah!.purnimanta.toString())
+                                ],),
+                              ),
+                              Padding(
+                                padding: const  EdgeInsets.fromLTRB(10.0,10,0,5),
+                                child: Row(children: [
+                                  Text("Panchang Yog"),Text(panchang.data!.panchangYog.toString())
 
 
-                                  ],),
-                                ),
-                                Padding(
-                                  padding: const  EdgeInsets.fromLTRB(10.0,10,0,5),
-                                  child: Row(children: [
-                                    Text("Amanta"),Text(panchang.data!.hinduMaah!.amanta.toString())
+                                ],),
+                              ),
+                              Padding(
+                                padding: const  EdgeInsets.fromLTRB(10.0,10,0,5),
+                                child: Row(children: [
+                                  Text("Vikram Samvat"),Text(panchang.data!.vikramSamvat.toString())
 
 
-                                  ],),
-                                ),
+                                ],),
+                              ),
+                              Padding(
+                                padding: const  EdgeInsets.fromLTRB(10.0,10,0,5),
+                                child: Row(children: [
+                                  Text("Shaka samvat"),Text(panchang.data!.shakaSamvatName.toString())
 
 
+                                ],),
+                              ),
+                              Padding(
+                                padding: const  EdgeInsets.fromLTRB(10.0,10,0,5),
+                                child: Row(children: [
+                                  Text("Disha Shool"),Text(panchang.data!.dishaShool.toString())
 
 
-                              ],),
-                              Column(children: [
+                                ],),
+                              ),
+                              Padding(
+                                padding: const  EdgeInsets.fromLTRB(10.0,10,0,5),
+                                child: Row(children: [
+                                  Text("Disha Shool remedies"),Text(panchang.data!.dishaShool.toString())
 
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(10.0,10,0,5),
-                                  child: Row(children: [
-                                    Text("Paksha:"),Text(panchang.data!.paksha.toString())
 
+                                ],),
+                              ),
 
-                                  ],),
-                                ),
-                                Padding(
-                                  padding:const EdgeInsets.fromLTRB(10.0,10,0,5),
-                                  child: Row(children: [
-                                    Text("Ritu :"),Text(panchang.data!.ritu.toString())
 
 
-                                  ],),
-                                ),
-                                Padding(
-                                  padding: const  EdgeInsets.fromLTRB(10.0,10,0,5),
-                                  child: Row(children: [
-                                    Text("Sunsign"),Text(panchang.data!.sunSign.toString())
 
+                            ],),
+                            Column(children: [
+                              Text("Abhijit Muhurata",style: TextStyle(fontSize: 18,color: Colors.black),),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(10.0,10,0,5),
+                                child: Row(children: [
+                                  Text("Start :"),Text(panchang.data!.abhijitMuhurta!.start.toString())
 
-                                  ],),
-                                ),
-                                Padding(
-                                  padding: const  EdgeInsets.fromLTRB(10.0,10,0,5),
-                                  child: Row(children: [
-                                    Text("Moonsign"),Text(panchang.data!.moonSign.toString())
 
+                                ],),
+                              ),
+                              Padding(
+                                padding:const EdgeInsets.fromLTRB(10.0,10,0,5),
+                                child: Row(children: [
+                                  Text("End :"),Text(panchang.data!.abhijitMuhurta!.start.toString())
 
-                                  ],),
-                                ),
-                                Padding(
-                                  padding: const  EdgeInsets.fromLTRB(10.0,10,0,5),
-                                  child: Row(children: [
-                                    Text("Ayana"),Text(panchang.data!.ayana.toString())
 
+                                ],),
+                              ),
 
-                                  ],),
-                                ),
-                                Padding(
-                                  padding: const  EdgeInsets.fromLTRB(10.0,10,0,5),
-                                  child: Row(children: [
-                                    Text("Panchang Yog"),Text(panchang.data!.panchangYog.toString())
 
 
-                                  ],),
-                                ),
-                                Padding(
-                                  padding: const  EdgeInsets.fromLTRB(10.0,10,0,5),
-                                  child: Row(children: [
-                                    Text("Vikram Samvat"),Text(panchang.data!.vikramSamvat.toString())
 
 
-                                  ],),
-                                ),
-                                Padding(
-                                  padding: const  EdgeInsets.fromLTRB(10.0,10,0,5),
-                                  child: Row(children: [
-                                    Text("Shaka samvat"),Text(panchang.data!.shakaSamvatName.toString())
+                            ],),
+                            Column(children: [
+                              Text("Rahukaal",style: TextStyle(fontSize: 18,color: Colors.black),),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(10.0,10,0,5),
+                                child: Row(children: [
+                                  Text("Start :"),Text(panchang.data!.rahukaal!.start.toString())
 
 
-                                  ],),
-                                ),
-                                Padding(
-                                  padding: const  EdgeInsets.fromLTRB(10.0,10,0,5),
-                                  child: Row(children: [
-                                    Text("Disha Shool"),Text(panchang.data!.dishaShool.toString())
+                                ],),
+                              ),
+                              Padding(
+                                padding:const EdgeInsets.fromLTRB(10.0,10,0,5),
+                                child: Row(children: [
+                                  Text("End :"),Text(panchang.data!.rahukaal!.end.toString())
 
 
-                                  ],),
-                                ),
-                                Padding(
-                                  padding: const  EdgeInsets.fromLTRB(10.0,10,0,5),
-                                  child: Row(children: [
-                                    Text("Disha Shool remedies"),Text(panchang.data!.dishaShool.toString())
+                                ],),
+                              ),
 
 
-                                  ],),
-                                ),
 
 
 
+                            ],),
+                            Column(children: [
+                              Text("Gulikaal",style: TextStyle(fontSize: 18,color: Colors.black),),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(10.0,10,0,5),
+                                child: Row(children: [
+                                  Text("Start :"),Text(panchang.data!.guliKaal!.start.toString())
 
-                              ],),
-                              Column(children: [
-                                Text("Abhijit Muhurata",style: TextStyle(fontSize: 18,color: Colors.black),),
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(10.0,10,0,5),
-                                  child: Row(children: [
-                                    Text("Start :"),Text(panchang.data!.abhijitMuhurta!.start.toString())
 
+                                ],),
+                              ),
+                              Padding(
+                                padding:const EdgeInsets.fromLTRB(10.0,10,0,5),
+                                child: Row(children: [
+                                  Text("End :"),Text(panchang.data!.guliKaal!.end.toString())
 
-                                  ],),
-                                ),
-                                Padding(
-                                  padding:const EdgeInsets.fromLTRB(10.0,10,0,5),
-                                  child: Row(children: [
-                                    Text("End :"),Text(panchang.data!.abhijitMuhurta!.start.toString())
 
+                                ],),
+                              ),
 
-                                  ],),
-                                ),
 
 
 
 
+                            ],),
+                            Column(children: [
+                              Text("Yamghanta kaal",style: TextStyle(fontSize: 18,color: Colors.black),),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(10.0,10,0,5),
+                                child: Row(children: [
+                                  Text("Start :"),Text(panchang.data!.yamghantKaal!.start.toString())
 
-                              ],),
-                              Column(children: [
-                                Text("Rahukaal",style: TextStyle(fontSize: 18,color: Colors.black),),
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(10.0,10,0,5),
-                                  child: Row(children: [
-                                    Text("Start :"),Text(panchang.data!.rahukaal!.start.toString())
 
+                                ],),
+                              ),
+                              Padding(
+                                padding:const EdgeInsets.fromLTRB(10.0,10,0,5),
+                                child: Row(children: [
+                                  Text("End Time :"),Text(panchang.data!.yamghantKaal!.end.toString())
 
-                                  ],),
-                                ),
-                                Padding(
-                                  padding:const EdgeInsets.fromLTRB(10.0,10,0,5),
-                                  child: Row(children: [
-                                    Text("End :"),Text(panchang.data!.rahukaal!.end.toString())
 
+                                ],),
+                              ),
 
-                                  ],),
-                                ),
 
 
 
 
+                            ],),
+                          ],);
 
-                              ],),
-                              Column(children: [
-                                Text("Gulikaal",style: TextStyle(fontSize: 18,color: Colors.black),),
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(10.0,10,0,5),
-                                  child: Row(children: [
-                                    Text("Start :"),Text(panchang.data!.guliKaal!.start.toString())
-
-
-                                  ],),
-                                ),
-                                Padding(
-                                  padding:const EdgeInsets.fromLTRB(10.0,10,0,5),
-                                  child: Row(children: [
-                                    Text("End :"),Text(panchang.data!.guliKaal!.end.toString())
-
-
-                                  ],),
-                                ),
-
-
-
-
-
-                              ],),
-                              Column(children: [
-                                Text("Yamghanta kaal",style: TextStyle(fontSize: 18,color: Colors.black),),
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(10.0,10,0,5),
-                                  child: Row(children: [
-                                    Text("Start :"),Text(panchang.data!.yamghantKaal!.start.toString())
-
-
-                                  ],),
-                                ),
-                                Padding(
-                                  padding:const EdgeInsets.fromLTRB(10.0,10,0,5),
-                                  child: Row(children: [
-                                    Text("End Time :"),Text(panchang.data!.yamghantKaal!.end.toString())
-
-
-                                  ],),
-                                ),
-
-
-
-
-
-                              ],),
-                            ],);
-
-
-                          }
-                          return CircularProgressIndicator();
 
                         }
+                        return CircularProgressIndicator();
+
+                      }
 
 
 
 
-                        ),
-                      )])))]);
+                      )]);
 
 
                   }
